@@ -104,7 +104,7 @@ export default {
 </script>
 
 <template>
-    <form  action="#" @submit.prevent="submit" class="sign-up-htm">
+    <form   @submit.prevent="submit" class="sign-up-htm">
                         <div class="group">
                             <label :class="{invalid: $v.nome.$dirty && $v.nome.$invalid}" for="sing-up-user" class="label">Usuário</label>
                             <input :class="{invalid: $v.nome.$dirty && $v.nome.$invalid}" @input="$v.nome.$touch()" id="sing-up-user" type="text" v-model="nome" class="input">

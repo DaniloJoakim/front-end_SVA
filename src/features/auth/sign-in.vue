@@ -37,12 +37,12 @@
                 HTTP.post('/token', this.$data).then(response => {
                      this.$emit('do-sign-in', {...this.$data})
                     
-                    window.console.log(response.data.token)
-                   window.console.log(response)
-
+                  //  window.console.log(response.data.token)
+                   //window.console.log(response)
+                    this.$store.commit('setUser', response.data)
                    const token = response.data.token
                    localStorage.setItem('user-token', token)
-
+                    this.$router.push({ path: '/'})
                    
 
                 }).catch(e => {

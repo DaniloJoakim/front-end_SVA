@@ -8,6 +8,7 @@
     
 
     export default {
+            name: 'Auth',
             components : {
                 
                 SignIn,
@@ -34,7 +35,7 @@
            doSignIn  (obj) {
                     
                     window.console.log(obj)
-
+                    
                     this.flash('Login com Sucesso', 'success', {timeout: 3000});
            },
 
