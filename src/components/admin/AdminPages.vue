@@ -5,13 +5,13 @@
             <div class="admin-pages-tabs">
                 <b-card no-body>
                     <b-tabs card>
-                        <b-tab title="Artigos" active>
+                        <b-tab title="Meus Dados" active>
                             <ArticleAdmin/>
                         </b-tab>
-                        <b-tab title="Categorias" >
+                        <b-tab title="Minhas Vagas" >
                            <CategoryAdmin/>
                         </b-tab>
-                        <b-tab title="Usuários">
+                        <b-tab title="Minhas Competências">
                              <UserAdmin/>
                         </b-tab>
                     </b-tabs>

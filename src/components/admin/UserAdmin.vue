@@ -6,7 +6,7 @@
                 <b-col md="6" sm="12">
                     <b-form-group label="Competência" label-for="select-comp">
                         <b-form-select id="select-comp" v-model="user.id_comp" 
-                        :disabled="mode === 'remove'" class="mb-3">
+                        :disabled="mode === 'remove' || mode === 'edit' " class="mb-3">
                         <template slot="first">
                             <option :value="null" disabled>-- Selecione uma Competência --</option>
                         </template>
@@ -23,11 +23,11 @@
                         <template slot="first">
                             <option :value="null" disabled>-- Selecione um Nível --</option>
                         </template>
-                                <option value= 1 style="color:red; font-weight:bold">Ruim</option>
-                                <option value= 2 style="color:yellow; font-weight:bold">Intermediário</option>
-                                <option value= 3 style="color:blue; font-weight:bold">Bom</option>
-                                <option value= 4 style="color:green; font-weight:bold">Muito Bom</option>
-                                <option value= 5 style="color:black; font-weight:bold">Especialista</option>
+                                <option value= "1" style="color:red; font-weight:bold">Ruim</option>
+                                <option value= "2" style="color:yellow; font-weight:bold">Intermediário</option>
+                                <option value= "3" style="color:blue; font-weight:bold">Bom</option>
+                                <option value= "4" style="color:green; font-weight:bold">Muito Bom</option>
+                                <option value= "5" style="color:black; font-weight:bold">Especialista</option>
                              </b-form-select>
                     </b-form-group>
             
@@ -36,11 +36,11 @@
             {{user.nivel}}
             </b-row>
 
-            <b-button variant="success" v-if="mode === 'save'"
+            <b-button variant="success" v-if="mode === 'save' || mode === 'edit'" 
                 @click="save">Salvar</b-button>
 
             
-            <b-button variant="danger" v-if="mode === 'remove'"
+            <b-button variant="danger" v-b-tooltip.hover="'Você deseja realmente realizar essa operação ?'" v-if="mode === 'remove'"
                 @click="remove">Excluir</b-button>
 
             <b-button class="ml-2" @click="reset">Cancelar</b-button>
@@ -49,10 +49,10 @@
         <hr>
         <b-table hover striped :items="users" :fields="fields">
             <template slot="actions" slot-scope="data">
-                <b-button variant="warning" @click="loadUser(data.item)" class="mr-2">
+                <b-button variant="warning" @click="loadUser(data.item, 'edit')"  class="mr-2">
                     <i class="fa fa-pencil"></i>
                 </b-button>
-                <b-button variant="danger" @click="loadUser(data.item, 'remove')" class="mr-2">
+                <b-button variant="danger" v-b-tooltip.hover="'Você tem certeza disso ?'" @click="loadUser(data.item, 'remove')" class="mr-2">
                     <i class="fa fa-trash"></i>
                 </b-button>
             </template>
@@ -76,28 +76,28 @@ export default {
              fields: [
                  {key:'id_comp', label: 'Código', sortable: true},
                  {key:'descricaoCompetencia', label: 'Descrição', sortable: true},
-                 {key:'nivel', label: 'Nível', sortable: true},
-                 {key:'actions', label: 'Ações'}
+                 {key:'nivel', label: 'Nível', sortable: true, _rowVariant : 'danger'},
+                {key:'actions', label: 'Ações'}
              ],
             id_comp: null,
              options: {},
             nivel: null
+            
          }
     },
     methods: {
         loadUsers(){
 
         HTTP.get('/aluno/competencia/1').then(response => {
-                    
+                    this.$toasted.global.defaultSucess();
                     this.users = response.data.payload
-                
+                    
                 }).catch(showError)
 
 
         HTTP.get('/competencia').then(response => {
                     
                     this.options = response.data.payload
-                    
                 
                 }).catch(showError)
         },
@@ -108,24 +108,44 @@ export default {
         },
         save() {
 
-            
-
                 this.user.id_aluno = 1
-                console.log(this.user)
-           HTTP.post('/aluno/competencia',this.user).then(response => {
-                    this.$toasted.global.defaultSuccess()
-                    this.reset()
+
                 
-                }).catch(showError)
+                    if(this.mode === 'save') {
+                        
+                        HTTP.post('/aluno/competencia',this.user).then(() => {
+                                   this.$toasted.global.defaultSucess();
+                                    this.reset()
+                                
+                                }).catch(showError)
+                    } else {
+                                
+                         HTTP.put('/aluno/competencia/atualizar/'+ this.user.id_aluno, this.user).then(() => {
+                                  
+                                    this.reset()
+
+                                }).catch(showError)
+                    }
         }, 
         remove() {
-            //Verificar API
-        },
+                     this.user.id_aluno = 1
+                    
+                        console.log(this.user)
+                 HTTP.put('/aluno/competencia/excluir',this.user).then(res => {
+                                console.log(res)
+                                this.$toasted.global.defaultSucess();
+                                 this.reset()
 
+
+                                }).catch( e => {
+                    
+                    console.log('Erro:',e)
+                    })
+        },
         loadUser(user, mode = 'save') {
             this.mode = mode
             this.user = { ...user }
-            console.log(this.user)
+            
         }
 
     },
