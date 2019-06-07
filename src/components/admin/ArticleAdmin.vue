@@ -8,7 +8,7 @@
                         label-for="name"  >
                             <b-form-input
                             id="name"
-                            v-model="user.nome"
+                            v-model="use.nome"
                             :disabled="mode === 'save'"
                             type="text"
                             required
@@ -22,7 +22,7 @@
                             label-for="lastname"  >
                                 <b-form-input
                                 id="lastname"
-                                v-model="user.sobrenome"
+                                v-model="use.sobrenome"
                                 :disabled="mode === 'save'"
                                 type="text"
                                 required
@@ -36,7 +36,7 @@
                             label-for="alunoEmail"  >
                                 <b-form-input
                                 id="alunoEmail"
-                                v-model="user.alunoEmail"
+                                v-model="use.alunoEmail"
                                 :disabled="mode === 'save'"
                                 type="email"
                                 required
@@ -52,9 +52,9 @@
                                 label-for="datanasc"  >
                                     <b-form-input
                                     id="datanasc"
-                                    v-model="user.datNasc"
+                                    v-model="use.datNasc"
                                     :disabled="mode === 'save'"
-                                    type="datetime"
+                                    type="date"
                                     required
                                     placeholder="Digite sua data de nascimento"
                                     ></b-form-input>
@@ -66,7 +66,7 @@
                             label-for="idade"  >
                                 <b-form-input
                                 id="idade"
-                                v-model="user.idade"
+                                v-model="use.idade"
                                 :disabled="mode === 'save'"
                                 type="number"
                                 required
@@ -82,7 +82,7 @@
                         label-for="cidade"  >
                             <b-form-input
                             id="cidade"
-                            v-model="user.cidade"
+                            v-model="use.cidade"
                             :disabled="mode === 'save'"
                             type="text"
                             required
@@ -95,7 +95,7 @@
                         <b-form-select
                         id="estado"
                         :disabled="mode === 'save'"
-                        v-model="user.estado"
+                        v-model="use.estado"
                         :options="estados"
                         required
                         ></b-form-select>
@@ -105,7 +105,7 @@
                     <b-form-group label="Pais" label-for="pais"  >
                             <b-form-input
                             id="pais"
-                            v-model="user.pais"
+                            v-model="use.pais"
                             :disabled="mode === 'save'"
                             type="text"
                             required
@@ -119,7 +119,7 @@
                     <b-form-group label="Telefone" label-for="telefone"  >
                             <b-form-input
                             id="telefone"
-                            v-model="user.telefone"
+                            v-model="use.telefone"
                             :disabled="mode === 'save'"
                             type="text"
                             required
@@ -132,7 +132,7 @@
                     <b-form-group label="Celular" label-for="Celular"  >
                             <b-form-input
                             id="celular"
-                            v-model="user.celular"
+                            v-model="use.celular"
                             :disabled="mode === 'save'"
                             type="text"
                             required
@@ -147,7 +147,7 @@
                     <b-form-group label="Instituição" label-for="instituicao"  >
                             <b-form-input
                             id="instituicao"
-                            v-model="user.instituicao"
+                            v-model="use.instituicao"
                             :disabled="mode === 'save'"
                             type="text"
                             required
@@ -159,7 +159,7 @@
                      <b-form-group label="Curso" label-for="curso"  >
                             <b-form-input
                             id="curso"
-                            v-model="user.curso"
+                            v-model="use.curso"
                             :disabled="mode === 'save'"
                             type="text"
                             required
@@ -171,7 +171,7 @@
                      <b-form-group label="Você está Cursando ?" label-for="status"  >
                              <b-form-select
                                 id="status"
-                                v-model="user.status"
+                                v-model="use.status"
                                 :disabled="mode === 'save'"
                                 required
                             > 
@@ -189,7 +189,7 @@
                     <b-form-group label="Período" label-for="periodo"  >
                             <b-form-input
                             id="periodo"
-                            v-model="user.periodo"
+                            v-model="use.periodo"
                             :disabled="mode === 'save'"
                             type="text"
                             required
@@ -201,7 +201,7 @@
                      <b-form-group label="Semestre" label-for="semestre"  >
                           <b-form-select
                                 id="semestre"
-                                v-model="user.semestre"
+                                v-model="use.semestre"
                                 :disabled="mode === 'save'"
                                 required
                             > 
@@ -225,7 +225,7 @@
                      <b-form-group label="Data de início" label-for="datainicio"  >
                             <b-form-input
                             id="datainicio"
-                            v-model="user.inicio"
+                            v-model="use.inicio"
                             :disabled="mode === 'save'"
                             type="date"
                             required
@@ -236,7 +236,7 @@
                     <b-form-group label="Data de Término" label-for="datatermino"  >
                            <b-form-input
                             id="datatermino"
-                            v-model="user.termino"
+                            v-model="use.termino"
                             :disabled="mode === 'save'"
                             type="date"
                             required
@@ -247,7 +247,7 @@
                     <b-form-group label="Data de prevista de Conclusão" label-for="dataconclusao"  >
                             <b-form-input
                             id="dataconclusao"
-                            v-model="user.conclusao"
+                            v-model="use.conclusao"
                             :disabled="mode === 'save'"
                             type="date"
                             required
@@ -276,14 +276,15 @@
 </template>
 
 <script>
-import moment from 'moment'
+//import moment from 'moment'
+import { mapState } from 'vuex' 
 import { HTTP, showError} from '@/features/http-common'
 
 export default {
     name: 'ArticleAdmin',
     data() {
       return {
-        user: {},
+        use: {},
         mode: 'save',
        estados: [
             { text: 'Selecione uma UF', value: null }, 
@@ -293,11 +294,12 @@ export default {
     },
     methods: {
         loadUser() {
-                this.user.id = 1
             
-        HTTP.get('/alunos/'+ this.user.id).then(response => {
+                 this.use.id = this.user.id
+
+        HTTP.get('/alunos/'+ this.use.id).then(response => {
                     this.$toasted.global.defaultSucess();
-                    this.user = response.data.payload
+                    this.use = response.data.payload
                     this.mode = 'save'
         
                     
@@ -305,8 +307,8 @@ export default {
                 }).catch(showError)
         },
         save() {
-                 this.user.id = 1
-            HTTP.put('/alunos/'+ this.user.id, this.user).then(()=> {
+                  this.use.id = this.user.id
+            HTTP.put('/alunos/'+ this.use.id, this.use).then(()=> {
                         this.$toasted.global.defaultSucess();
                         this.mode = 'save'
                 }).catch(showError)
@@ -320,7 +322,8 @@ export default {
     mounted() {
         this.loadUser()
 
-    } 
+    },
+    computed: mapState(['user']) 
   }
 </script>
 

@@ -56,19 +56,28 @@ export default {
     }
 
     .stat-title {
+        display: block;
+        width: 300px;
         font-size: 1.2rem;
     }
     .stat-empresa {
+        
+        display: block;
+        width: 300px;
+        padding: 10px;
         font-size: 1.2rem;
     }
 
     .stat-competencia {
+        
+        display: block;
+        width: 300px;
         font-size: 3rem;
     }
 
-    .stat-info-comp {
+    /*.stat-info-comp {
         flex: 1;
         flex-direction: column;
         align-items: flex-end;
-    }
+    }*/
 </style>

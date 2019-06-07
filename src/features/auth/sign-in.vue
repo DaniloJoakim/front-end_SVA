@@ -1,7 +1,8 @@
 <script>
 
     import { required } from 'vuelidate/lib/validators'
-    import { HTTP } from '../http-common'
+    import { HTTP, userKey } from '../http-common'
+    import { mapState } from 'vuex'
 
 
     export default {
@@ -24,7 +25,7 @@
             return {
                 email: '',
                 senha: '',
-                KeepSignerdIn: true,
+                KeepSignerdIn: true
             }
         }, 
 
@@ -39,9 +40,15 @@
                     
                   //  window.console.log(response.data.token)
                    //window.console.log(response)
+
+
                     this.$store.commit('setUser', response.data)
-                   const token = response.data.token
-                   localStorage.setItem('user-token', token)
+                    localStorage.setItem(userKey, JSON.stringify(response.data))
+
+                   //this.user = response.data
+                    //console.log(user)
+                    //const token = response.data.token
+                    //localStorage.setItem('user-token', token)
                     this.$router.push({ path: '/'})
                    
 
@@ -75,8 +82,10 @@
                 }
 
             },
+             
             
-        }
+        },
+         computed: mapState(['user'])
     }
 
 </script>

@@ -1,7 +1,7 @@
 <template>
     <div class="admin-pages">
-        <PageTitle icon="fa fa-cogs" main="Administração do Sistema"
-                sub="Cadastros & Cia" />
+        <PageTitle icon="fa fa-cogs" main="Gerenciar meus Dados"
+                sub="Cadastros" />
             <div class="admin-pages-tabs">
                 <b-card no-body>
                     <b-tabs card>
@@ -9,7 +9,7 @@
                             <ArticleAdmin/>
                         </b-tab>
                         <b-tab title="Minhas Vagas" >
-                           <CategoryAdmin/>
+                           <CategoryAdmin :load="load" />
                         </b-tab>
                         <b-tab title="Minhas Competências">
                              <UserAdmin/>
@@ -27,6 +27,11 @@ import CategoryAdmin from './CategoryAdmin'
 import UserAdmin from './UserAdmin'
 
 export default {
+    data() {
+        return {
+             load: true,
+        }
+    },
     name: 'AdminPages',
     components: { PageTitle , ArticleAdmin, CategoryAdmin, UserAdmin}
 

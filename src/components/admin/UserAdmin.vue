@@ -5,7 +5,7 @@
             <b-row>
                 <b-col md="6" sm="12">
                     <b-form-group label="Competência" label-for="select-comp">
-                        <b-form-select id="select-comp" v-model="user.id_comp" 
+                        <b-form-select id="select-comp" v-model="use.id_comp" 
                         :disabled="mode === 'remove' || mode === 'edit' " class="mb-3">
                         <template slot="first">
                             <option :value="null" disabled>-- Selecione uma Competência --</option>
@@ -18,7 +18,7 @@
                 </b-col>
                  <b-col md="6" sm="12">
                     <b-form-group label="Nível" label-for="select-nivel">
-                        <b-form-select id="select-nivel" v-model="user.nivel"
+                        <b-form-select id="select-nivel" v-model="use.nivel"
                            :disabled="mode === 'remove'"  class="mb-3">
                         <template slot="first">
                             <option :value="null" disabled>-- Selecione um Nível --</option>
@@ -32,8 +32,7 @@
                     </b-form-group>
             
                 </b-col>
-                {{user.id_comp}}
-            {{user.nivel}}
+                
             </b-row>
 
             <b-button variant="success" v-if="mode === 'save' || mode === 'edit'" 
@@ -61,7 +60,7 @@
 </template>
 
 <script>
-
+import { mapState } from 'vuex'
 import { HTTP } from '@/features/http-common'
 import { showError } from '../../features/http-common'
 
@@ -71,7 +70,7 @@ export default {
     data: function(){
          return {
              mode: 'save',
-             user: {},
+            use: {},
              users: [],
              fields: [
                  {key:'id_comp', label: 'Código', sortable: true},
@@ -81,14 +80,16 @@ export default {
              ],
             id_comp: null,
              options: {},
-            nivel: null
+            nivel: null,
+            
             
          }
     },
     methods: {
         loadUsers(){
-
-        HTTP.get('/aluno/competencia/1').then(response => {
+              // this.user.id = 1
+            
+        HTTP.get('/aluno/competencia/'+ this.user.id).then(response => {
                     this.$toasted.global.defaultSucess();
                     this.users = response.data.payload
                     
@@ -103,24 +104,25 @@ export default {
         },
         reset() {
             this.mode ='save'
-            this.user = {}
+            this.use = {}
             this.loadUsers()
         },
         save() {
-
-                this.user.id_aluno = 1
-
-                
+                //console.log(this.use)
+                 console.log("user.id", this.user)
+                this.use.id_aluno = this.user.id
+                this.use.id = this.user.id
+                // console.log(this.use)
                     if(this.mode === 'save') {
-                        
-                        HTTP.post('/aluno/competencia',this.user).then(() => {
+                     //   console.log('Inserir',this.use)       
+                        HTTP.post('/aluno/competencia',this.use).then(() => {
                                    this.$toasted.global.defaultSucess();
                                     this.reset()
                                 
                                 }).catch(showError)
                     } else {
-                                
-                         HTTP.put('/aluno/competencia/atualizar/'+ this.user.id_aluno, this.user).then(() => {
+                               // console.log('Atualizar',this.use)
+                         HTTP.put('/aluno/competencia/atualizar/'+ this.use.id_aluno, this.use).then(() => {
                                   
                                     this.reset()
 
@@ -128,23 +130,17 @@ export default {
                     }
         }, 
         remove() {
-                     this.user.id_aluno = 1
-                    
-                        console.log(this.user)
-                 HTTP.put('/aluno/competencia/excluir',this.user).then(res => {
-                                console.log(res)
+                    this.use.id_aluno = this.user.id
+                   // console.log('Remover',this.use)
+                 HTTP.put('/aluno/competencia/excluir', this.use).then(() => {
                                 this.$toasted.global.defaultSucess();
                                  this.reset()
-
-
-                                }).catch( e => {
-                    
-                    console.log('Erro:',e)
-                    })
+                                }).catch(showError)
         },
-        loadUser(user, mode = 'save') {
+        loadUser(use, mode = 'save') {
+            //console.log('Remover',this.user)
             this.mode = mode
-            this.user = { ...user }
+            this.use = { ...use }
             
         }
 
@@ -152,7 +148,8 @@ export default {
     mounted() {
         this.loadUsers()
 
-    }
+    },
+     computed: mapState(['user'])
 }
 </script>
 

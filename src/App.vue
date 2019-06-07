@@ -1,13 +1,10 @@
 <template>
     <div id="app" :class="{'hide-menu': !isMenuVisible || !user}">
-
-        <!-- <ved-auth/>-->
-
         <Header title="Student Vacancy Announcement - S.V.A - 2019 " 
         :hideToggle="!user"
         :hideUserDropdown="!user"/>
         <Content />
-        <Menu v-if="!user"/>
+        <Menu v-if="user"/>
         <Footer/>
 
     </div>
@@ -15,16 +12,14 @@
 
 <script> 
     import {mapState} from 'vuex'
-    import VedAuth from './features/auth/main'
-    
     import Header from './components/template/Header'
     import Menu from './components/template/Menu'
     import Content from './components/template/Content'
     import Footer from './components/template/Footer'
    
-     export default{
+ export default{
          name: "App",
-        components:{ VedAuth, Header, Menu, Content, Footer },
+        components:{ Header, Menu, Content, Footer },
         computed: mapState(['isMenuVisible', 'user'])
     }
 
